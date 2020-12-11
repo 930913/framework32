@@ -1,13 +1,13 @@
 # Framework32
 
-Framework32 is designed to give your ESP32 (currently TTGO T-Display) a basis
-to have multiple graphic applications orchestrated by a navigational system.
+Framework32 is designed to give your ESP32 (currently TTGO T-Display) the ability
+to have multiple, graphical apps, controlled by an intuitive navigational system.
 
 ## Features
 
 Current feature are:
 - Load multiple applications onto your device and choose what to run at runtime
-- Graphical "app-style" menu system with infinate scrolling
+- Graphical "app-style" menu system with infinite scrolling
 - Navigate "home" from anywhere by double clicking the left button
 - Status bar
   - Time (from NTP)
@@ -112,7 +112,7 @@ and when your app calls `getSettings()` you will receive a [JsonObject](https://
 
 # Footnotes
 
-<b id="f1">1</b> [Henning Karlsen's](http://www.rinkydinkelectronics.com/t_imageconverter565.php)  [↩](#a2)
+<b id="f1">1</b> You can use [Henning Karlsen's Image Converter](http://www.rinkydinkelectronics.com/t_imageconverter565.php) to generate these. [↩](#a2)
 
 <b id="f2">2</b> For general graphics, [Bodmer's TFT_eSPI library](https://github.com/Bodmer/TFT_eSPI) was used. [↩](#a1)
 
