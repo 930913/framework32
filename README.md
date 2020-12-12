@@ -1,3 +1,5 @@
+![Demonstration](media/demo.gif)
+
 # Framework32
 
 Framework32 is designed to give your ESP32 (currently TTGO T-Display) the ability
