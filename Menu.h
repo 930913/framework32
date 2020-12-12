@@ -28,8 +28,8 @@ class Menu : public App {
         bool lhs = i % 2 == 1;
         Serial.print("Menu yOffset: ");
         byte menuY = i / 2 - !lhs - yOffset;
-        Serial.println(yOffset);
-        Serial.println(menuSelect);
+        //Serial.println(yOffset);
+        //Serial.println(menuSelect);
         tft.pushImage(lhs ? 2 : 69, 11 + menuY * 77, 64, 64, apps[i]->getIcon());
         tft.setCursor(lhs ? 3 : 70, 10 + 66 + menuY * 77, 1);
         tft.println(apps[i]->getMenuName());

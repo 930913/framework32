@@ -6,10 +6,12 @@
 #include "WifiScan.h"
 #include "BbcNews.h"
 #include "DemoApp.h"
+#include "BitcoinTracker.h"
 
 // Register apps here
 App* apps[] = {
   &menu,
+  &bitcointracker,
   &breakout,
   &hive,
   &bbcnews,

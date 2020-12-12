@@ -96,7 +96,7 @@ class BbcNews : public App {
       tft.setTextSize(1);
       tft.setTextColor(TFT_WHITE);
       tft.println(news[newsI]);
-      tft.println("-----------------------");
+      tft.println("----------------------");
       tft.println(newsDetails[newsI]);
       rerenderNews = false;
     }
