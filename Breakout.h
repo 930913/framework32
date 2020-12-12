@@ -1,3 +1,5 @@
+// Adapted from Volos Projects' code: https://www.youtube.com/watch?v=N6V7ZJkhSbc
+
 #include "breakoutlogo.h"
 #include "breakoutsplash.h"
 #define TFT_GREY 0x5AEB
