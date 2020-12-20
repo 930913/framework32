@@ -5,7 +5,7 @@ class BitcoinTracker : public App {
     long lastUpdated;
   public:
     char* getMenuName() override {
-      return "BTC Tracker";
+      return "BTC Trackr";
     }
     const unsigned short* getIcon() override {
       return bitcoinlogo;
