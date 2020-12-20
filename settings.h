@@ -123,8 +123,9 @@ void renderStatus(TFT_eSPI tft) {
 
 long sleepTimer = 0;
 bool sleeping = false;
+void resetSleepTimer() { sleepTimer = millis(); }
 bool wakeCallback() {
-  sleepTimer = millis();
+  resetSleepTimer();
   if (!sleeping) return false;
   digitalWrite(TFT_BL, TFT_BACKLIGHT_ON);
   sleeping = false;

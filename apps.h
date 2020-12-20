@@ -7,10 +7,12 @@
 #include "BbcNews.h"
 #include "DemoApp.h"
 #include "BitcoinTracker.h"
+//#include "LichessTv.h"
 
 // Register apps here
 App* apps[] = {
   &menu,
+//  &lichesstv,
   &bitcointracker,
   &breakout,
   &hive,
