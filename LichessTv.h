@@ -82,7 +82,7 @@ class LichessTv : public App {
         byte rank = i / 8;
         int x = file * 16 + boardOffsetX;
         int y = (rank * 16) + boardOffsetY;
-        bool isLight = (rank + (file % 2)) % 2;
+        bool isLight = (rank + (file % 2) + 1) % 2;
         bool check = isCheck && ((board[i] == 'K' && ply % 2 == 0) || (board[i] == 'k' && ply % 2 == 1));
         long colour = check ? TFT_RED : (isLight ? (
                                            (i == lastMoveTo || i == lastMoveFrom) ? movedLightSquareColour : lightSquareColour
@@ -459,7 +459,7 @@ class LichessTv : public App {
         shouldRender = true;
       }
     };
-    
+
     void onButton1Click() override {
       if(gameState == SELECT_TYPE) {
         menuSelection = min(15, menuSelection + 1);
