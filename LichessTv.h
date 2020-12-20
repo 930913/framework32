@@ -21,10 +21,14 @@ class LichessTv : public App {
     float wclock;
     float bclock;
     long lastUpdate;
-    enum GameState { LOADING, GAME_ON, WHITE_WIN, BLACK_WIN, DRAW, DISCONNECTED, RELOAD };
+    enum GameState { SELECT_TYPE, LOADING, GAME_ON, WHITE_WIN, BLACK_WIN, DRAW, DISCONNECTED, RELOAD };
     GameState gameState;
     int ply;
     bool isCheck;
+    byte menuOffset;
+    byte menuSelection;
+    const char* gameTypes[17] = { "Top Rated", "Blitz", "Bullet", "Rapid", "UltraBullet", "Antichess", "Horde", "Atomic", "Crazyhouse", "Chess960", "King of the Hill", "Racing Kings", "Classical", "Three-check", "Bot", "Computer" };
+    byte gameType = 0;
 
     static const unsigned long lightSquareColour = 0xE695;
     static const unsigned long darkSquareColour = 0xB44C;
@@ -58,15 +62,15 @@ class LichessTv : public App {
     void parseFen() {
       //Serial.println("Parsing FEN");
       //Serial.println(fen);
-      char* b = board;
+      char* square = board;
       char* ptr = fen;
       while (*ptr) {
         if (*ptr > 60) {
-          *b++ = *ptr++;
+          *square++ = *ptr++;
         } else if (*ptr == '/') {
           ++ptr; // Ignore? Assumes full FEN
         } else {
-          b += *ptr++ - '0';
+          square += *ptr++ - '0';
         }
       }
     }
@@ -152,9 +156,38 @@ class LichessTv : public App {
       tft.printf("%05.2f", secs);
     }
 
+    void drawMenu(TFT_eSPI tft) {
+      Serial.println(menuSelection);
+      Serial.println(menuOffset);
+      fillScreen(tft, TFT_BLACK);
+      tft.setCursor(0, 11, 2);
+      for(int i = menuOffset; i < 17 && i < menuOffset + 14; ++i) {
+        tft.print(gameTypes[i]);
+        if(i == menuSelection) tft.print(" <");
+        tft.println();
+      }
+      shouldRender = false;
+    }
+
+    void drawHamburger(TFT_eSPI tft) {
+      tft.drawLine(25, 235, 30, 235, TFT_WHITE);
+      tft.drawLine(25, 237, 30, 237, TFT_WHITE);
+      tft.drawLine(25, 239, 30, 239, TFT_WHITE);
+    }
+
+    void drawReload(TFT_eSPI tft) {
+      // TODO: Use a better icon
+      tft.drawCircle(110, 236, 2, TFT_WHITE);
+    }
+
+    void drawIcons(TFT_eSPI tft) {
+      drawHamburger(tft);
+      drawReload(tft);
+    }
+
     void connectGame(TFT_eSPI tft) {
       wc.close();
-      String gameId = getGame(tft);
+      String gameId = getGame(tft, gameTypes[gameType]);
       if (gameId.isEmpty()) return;
       String socket = String("wss://socket1.lichess.org/watch/") + gameId + "/white/v5?sri=f32";
       Serial.println(socket);
@@ -168,7 +201,7 @@ class LichessTv : public App {
       wc.connect(socket);
     }
 
-    static String getGame(TFT_eSPI tft) {
+    static String getGame(TFT_eSPI tft, String gameType) {
       WiFiClientSecure *clientHttps = new WiFiClientSecure;
       // Checking this cert causes random crashes :(
       //clientHttps->setCACert(letsEncryptCert);
@@ -189,7 +222,7 @@ class LichessTv : public App {
             DynamicJsonDocument doc(2000);
             delay(1);
             DeserializationError err = deserializeJson(doc, payload);
-            String s = doc["Blitz"]["gameId"];
+            String s = doc[gameType]["gameId"];
             return s;
           } else {
             Serial.printf("[HTTPS] failed with status code: %d\n", httpCode);
@@ -363,11 +396,14 @@ class LichessTv : public App {
     void render(TFT_eSPI tft) override {
       if (wc.available()) wc.poll();
 
-      if (gameState == DRAW || gameState == WHITE_WIN || gameState == BLACK_WIN) {
+      if (gameState == SELECT_TYPE) {
+        if (shouldRender) drawMenu(tft);
+      } else if (gameState == DRAW || gameState == WHITE_WIN || gameState == BLACK_WIN) {
         if (shouldRender) {
           fillScreen(tft, TFT_BLACK);
           drawUsers(tft);
           drawBoard(tft);
+          drawIcons(tft);
           if (gameState == DRAW) {
             tft.drawLine(0, 25, 135, 25, 0xD484);
             tft.drawLine(0, 189, 135, 189, 0xD484);
@@ -386,6 +422,7 @@ class LichessTv : public App {
           fillScreen(tft, TFT_BLACK);
           drawUsers(tft);
           drawBoard(tft);
+          drawIcons(tft);
           shouldRender = false;
           vTaskDelay(100);
         }
@@ -394,6 +431,7 @@ class LichessTv : public App {
           fillScreen(tft, TFT_BLACK);
           tft.setCursor(1, 30, 2);
           tft.println("Got disconnected");
+          drawIcons(tft);
           shouldRender = false;
         }
       } else if (gameState == RELOAD) {
@@ -402,7 +440,32 @@ class LichessTv : public App {
     };
 
     void onButton1LongClick() override {
-      gameState = RELOAD;
+      if(gameState == SELECT_TYPE) {
+        gameType = menuSelection;
+        gameState = RELOAD;
+      } else {
+        gameState = RELOAD;
+      }
+    };
+
+    void onButton2Click() override {
+      if(gameState == SELECT_TYPE) {
+        menuSelection = max(0, menuSelection - 1);
+        if(menuSelection < menuOffset) --menuOffset;
+        shouldRender = true;
+      } else {
+        wc.close();
+        gameState = SELECT_TYPE;
+        shouldRender = true;
+      }
+    };
+    
+    void onButton1Click() override {
+      if(gameState == SELECT_TYPE) {
+        menuSelection = min(15, menuSelection + 1);
+        if(menuSelection > menuOffset + 13) ++menuOffset;
+        shouldRender = true;
+      }
     };
 
     void onClose() override {
