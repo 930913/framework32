@@ -363,7 +363,7 @@ class LichessTv : public App {
       tft.setCursor(1, 11, 2);
 
       if (!eventsRegistered) {
-        wc.setCACert(letsEncryptCert);
+        wc.setCACert(dstRootCert);
 
         Serial.println("Setting event");
         wc.onMessage([&](WebsocketsMessage msg) {
