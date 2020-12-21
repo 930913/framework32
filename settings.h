@@ -127,7 +127,7 @@ void resetSleepTimer() { sleepTimer = millis(); }
 bool wakeCallback() {
   resetSleepTimer();
   if (!sleeping) return false;
-  digitalWrite(TFT_BL, TFT_BACKLIGHT_ON);
+  Util::Screen::setScreenOn();
   sleeping = false;
   return true;
 }
@@ -135,7 +135,7 @@ void checkSleep() {
   if (!sleeping && millis() - sleepTimer > timeToSleep) {
     // TODO: Perhaps use a more efficient sleep, instead of just turning the backlight off?
     // We are also still processing the app as normal.
-    digitalWrite(TFT_BL, !TFT_BACKLIGHT_ON);
+    Util::Screen::setScreenOff();
     sleeping = true;
   }
 };

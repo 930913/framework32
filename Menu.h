@@ -18,7 +18,7 @@ class Menu : public App {
       //Serial.println("Rendering menu");
       if (menuSelect == renderedMenu) return;
       //Serial.println("Menu is being rendered");
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setTextColor(TFT_WHITE, TFT_BLACK);
       tft.setTextSize(1);
       //Serial.println(numapps);

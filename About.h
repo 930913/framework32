@@ -5,7 +5,7 @@ class About : public App {
     }
 
     void onSetup(TFT_eSPI tft) override {
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setTextColor(TFT_WHITE, TFT_BLACK);
       tft.setTextSize(1);
 

@@ -12,7 +12,7 @@ class BitcoinTracker : public App {
     };
     void onSetup(TFT_eSPI tft) override {
       tft.setTextColor(TFT_WHITE, TFT_BLACK);  tft.setTextSize(1);
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.pushImage(35, 15, 64, 64, bitcoinlogo);
       tft.setCursor(0, 80, 2);
       tft.println("Connecting...");
@@ -61,7 +61,7 @@ class BitcoinTracker : public App {
 
                 JsonObject rates = doc["bpi"];
 
-                fillScreen(tft, TFT_BLACK);
+                Util::Screen::fillScreen(tft, TFT_BLACK);
                 tft.pushImage(35, 15, 64, 64, bitcoinlogo);
                 tft.setCursor(0, 80, 2);
 

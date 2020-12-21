@@ -93,8 +93,10 @@ void setup()
   numapps = (sizeof(apps) / sizeof(App*));
   initialiseConfig();
 
+  byte rotation = configDoc.containsKey("rotation") ? configDoc["rotation"] : 0;
+
   tft.init();
-  tft.setRotation(0);
+  Util::Screen::setRotation(tft, rotation);
   tft.fillScreen(TFT_BLACK);
   tft.setTextSize(2);
   tft.setTextColor(TFT_WHITE);
@@ -104,7 +106,13 @@ void setup()
 
   if (TFT_BL > 0) { // TFT_BL has been set in the TFT_eSPI library in the User Setup file TTGO_T_Display.h
     pinMode(TFT_BL, OUTPUT); // Set backlight pin to output mode
-    digitalWrite(TFT_BL, TFT_BACKLIGHT_ON); // Turn backlight on. TFT_BACKLIGHT_ON has been set in the TFT_eSPI library in the User Setup file TTGO_T_Display.h
+    //digitalWrite(TFT_BL, TFT_BACKLIGHT_ON); // Turn backlight on. TFT_BACKLIGHT_ON has been set in the TFT_eSPI library in the User Setup file TTGO_T_Display.h
+
+    ledcSetup(Util::Screen::pwmLedChannelTFT, Util::Screen::pwmFreq, Util::Screen::pwmResolution);
+    ledcAttachPin(TFT_BL, Util::Screen::pwmLedChannelTFT);
+
+    byte brightness = configDoc.containsKey("screenBrightness") ? configDoc["screenBrightness"] : 255;
+    Util::Screen::setBrightness(tft, brightness);
   }
 
   tft.setSwapBytes(true);

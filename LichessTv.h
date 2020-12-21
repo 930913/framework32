@@ -159,7 +159,7 @@ class LichessTv : public App {
     void drawMenu(TFT_eSPI tft) {
       Serial.println(menuSelection);
       Serial.println(menuOffset);
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setCursor(0, 11, 2);
       for(int i = menuOffset; i < 17 && i < menuOffset + 14; ++i) {
         tft.print(gameTypes[i]);
@@ -359,7 +359,7 @@ class LichessTv : public App {
 
     void onSetup(TFT_eSPI tft) override {
       resetGame();
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setCursor(1, 11, 2);
 
       if (!eventsRegistered) {
@@ -400,7 +400,7 @@ class LichessTv : public App {
         if (shouldRender) drawMenu(tft);
       } else if (gameState == DRAW || gameState == WHITE_WIN || gameState == BLACK_WIN) {
         if (shouldRender) {
-          fillScreen(tft, TFT_BLACK);
+          Util::Screen::fillScreen(tft, TFT_BLACK);
           drawUsers(tft);
           drawBoard(tft);
           drawIcons(tft);
@@ -419,7 +419,7 @@ class LichessTv : public App {
           drawTime(tft);
           vTaskDelay(100);
         } else {
-          fillScreen(tft, TFT_BLACK);
+          Util::Screen::fillScreen(tft, TFT_BLACK);
           drawUsers(tft);
           drawBoard(tft);
           drawIcons(tft);
@@ -428,7 +428,7 @@ class LichessTv : public App {
         }
       } else if (gameState == DISCONNECTED) {
         if (shouldRender) {
-          fillScreen(tft, TFT_BLACK);
+          Util::Screen::fillScreen(tft, TFT_BLACK);
           tft.setCursor(1, 30, 2);
           tft.println("Got disconnected");
           drawIcons(tft);

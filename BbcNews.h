@@ -15,7 +15,7 @@ class BbcNews : public App {
     };
     void onSetup(TFT_eSPI tft) override {
       tft.setCursor(1, 10, 2);
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setTextSize(1);
       tft.println("Connecting...");
       WiFiClient *client = new WiFiClient;
@@ -91,7 +91,7 @@ class BbcNews : public App {
       Serial.print("News: ");
       Serial.println(news[newsI]);
       Serial.println(newsDetails[newsI]);
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setCursor(1, 10, 2);
       tft.setTextSize(1);
       tft.setTextColor(TFT_WHITE);

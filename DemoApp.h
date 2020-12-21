@@ -19,7 +19,7 @@ class DemoApp : public App {
       if (!shouldRender) return;
 
       // Helper function to blank the screen without overwriting the status bar
-      fillScreen(tft, TFT_BLACK);
+      Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setTextColor(TFT_WHITE, TFT_BLACK);
       tft.setTextSize(2);
 

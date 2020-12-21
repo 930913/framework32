@@ -21,7 +21,7 @@ class Hive : public App {
         {
           // Add a scoping block for HTTPClient https to make sure it is destroyed before WiFiClientSecure *client is
           HTTPClient https;
-          fillScreen(tft, TFT_BLACK);
+          Util::Screen::fillScreen(tft, TFT_BLACK);
           tft.setTextColor(TFT_WHITE, TFT_BLACK);  tft.setTextSize(1);
 
           tft.setCursor(0, 10, 2);
