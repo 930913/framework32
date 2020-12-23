@@ -357,7 +357,7 @@ class LichessTv : public App {
       return "Lichess TV";
     }
 
-    void onSetup(TFT_eSPI tft) override {
+    void onSetup(TFT_eSPI& tft) override {
       resetGame();
       Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setCursor(1, 11, 2);
@@ -393,7 +393,7 @@ class LichessTv : public App {
       connectGame(tft);
     };
 
-    void render(TFT_eSPI tft) override {
+    void render(TFT_eSPI& tft) override {
       if (wc.available()) wc.poll();
 
       if (gameState == SELECT_TYPE) {

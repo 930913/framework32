@@ -9,7 +9,7 @@ class Hive : public App {
     const unsigned short* getIcon() override {
       return hivelogo;
     };
-    void onSetup(TFT_eSPI tft) override {
+    void onSetup(TFT_eSPI& tft) override {
       JsonObject hiveSettings = getSettings();
       String username = hiveSettings["username"];
       Serial.print("Username for Hive: "); Serial.println(username);

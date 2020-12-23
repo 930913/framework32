@@ -37,7 +37,7 @@ class Breakout : public App {
     void newLevel(TFT_eSPI tft);
 
   public:
-    void onSetup(TFT_eSPI tft) override {
+    void onSetup(TFT_eSPI& tft) override {
       tft.pushImage(0, 0,  135, 240, breakoutsplash);
       ys = 1;
 
@@ -68,7 +68,7 @@ class Breakout : public App {
       level = 1;
     }
 
-    void render(TFT_eSPI tft) override {
+    void render(TFT_eSPI& tft) override {
 
       if (fase == 0)
       {

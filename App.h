@@ -3,9 +3,9 @@ class App {
   public:
     virtual char* getMenuName();
 
-    virtual void onSetup(TFT_eSPI tft) {};
+    virtual void onSetup(TFT_eSPI& tft) {};
 
-    virtual void render(TFT_eSPI tft) {};
+    virtual void render(TFT_eSPI& tft) {};
 
     virtual void onClose() {};
 

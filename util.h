@@ -1,23 +1,33 @@
 namespace Util {
   namespace Screen {
-    const int pwmFreq = 5000;
-    const int pwmResolution = 8;
-    const int pwmLedChannelTFT = 0;
+    namespace {
+      const int pwmFreq = 5000;
+      const int pwmResolution = 8;
+      const int pwmLedChannelTFT = 0;
 
-    byte orientation = 0;
-    byte brightness = 255;
+      byte orientation = 0;
+      byte brightness = 255;
 
-    bool screenOn = true;
-
-    void fillScreen(TFT_eSPI tft, uint32_t colour) {
-      tft.fillRect(0, 10, TFT_WIDTH, TFT_HEIGHT - 10, colour);
+      bool screenOn = true;
     }
 
-    void setRotation(TFT_eSPI tft, byte rotation) {
+    void setRotation(TFT_eSPI& tft, uint8_t rotation) {
       orientation = rotation;
       tft.setRotation(rotation);
     }
-    void setBrightness(TFT_eSPI tft, byte b) {
+    byte getRotation() {
+      return orientation;
+    }
+
+    byte getHeight() {
+      return orientation % 2 ? TFT_WIDTH : TFT_HEIGHT;
+    }
+
+    byte getWidth() {
+      return orientation % 2 ? TFT_HEIGHT: TFT_WIDTH;
+    }
+
+    void setBrightness(byte b) {
       brightness = b;
       ledcWrite(pwmLedChannelTFT, b);
     }
@@ -31,6 +41,9 @@ namespace Util {
       ledcWrite(pwmLedChannelTFT, 0);
     }
 
+    void fillScreen(TFT_eSPI& tft, uint32_t colour) {
+      tft.fillRect(0, 10, getWidth(), getHeight() - 10, colour);
+    }
   }
 
   //! Long time delay, it is recommended to use shallow sleep, which can effectively reduce the current consumption

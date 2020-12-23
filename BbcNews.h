@@ -13,7 +13,7 @@ class BbcNews : public App {
     const unsigned short* getIcon() override {
       return bbcnewslogo;
     };
-    void onSetup(TFT_eSPI tft) override {
+    void onSetup(TFT_eSPI& tft) override {
       tft.setCursor(1, 10, 2);
       Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.setTextSize(1);
@@ -86,7 +86,7 @@ class BbcNews : public App {
       delete client;
     }
 
-    void render(TFT_eSPI tft) override {
+    void render(TFT_eSPI& tft) override {
       if (!rerenderNews) return;
       Serial.print("News: ");
       Serial.println(news[newsI]);

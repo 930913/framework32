@@ -108,13 +108,14 @@ void renderStatus(TFT_eSPI tft) {
   //  Serial.println("Rendering status");
   if (lastStatusRender > millis() - 5000) return;
 
-  tft.fillRect(0, 0, TFT_WIDTH, 10, 0x0000);
-  tft.setCursor(0, 0);
+  tft.fillRect(0, 0, Util::Screen::getWidth(), 10, 0x0000);
+  tft.setCursor(0, 0, 1);
+  tft.setTextSize(1);
   float voltage = getBatteryVoltage();
-  drawBatterySymbol(tft, voltage, TFT_WIDTH - 10);
-  bool wifiDrawn = drawWifiSymbol(tft, wifiSignal, TFT_WIDTH - 20);
+  drawBatterySymbol(tft, voltage, Util::Screen::getWidth() - 10);
+  bool wifiDrawn = drawWifiSymbol(tft, wifiSignal, Util::Screen::getWidth() - 20);
   // if (wifiDrawn) offset next icon
-  tft.drawLine(0, 9, TFT_WIDTH, 9, 0x1111);
+  tft.drawLine(0, 9, Util::Screen::getWidth(), 9, 0x1111);
 
   drawClock(tft);
 

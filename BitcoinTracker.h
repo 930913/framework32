@@ -10,7 +10,7 @@ class BitcoinTracker : public App {
     const unsigned short* getIcon() override {
       return bitcoinlogo;
     };
-    void onSetup(TFT_eSPI tft) override {
+    void onSetup(TFT_eSPI& tft) override {
       tft.setTextColor(TFT_WHITE, TFT_BLACK);  tft.setTextSize(1);
       Util::Screen::fillScreen(tft, TFT_BLACK);
       tft.pushImage(35, 15, 64, 64, bitcoinlogo);
@@ -18,12 +18,12 @@ class BitcoinTracker : public App {
       tft.println("Connecting...");
       update(tft);
     }
-    void render(TFT_eSPI tft) override {
+    void render(TFT_eSPI& tft) override {
       if (lastUpdated + 60000 < millis()) {
         update(tft);
       }
     }
-    void update(TFT_eSPI tft) {
+    void update(TFT_eSPI& tft) {
       WiFiClient *client = new WiFiClient;
       if (client) {
 

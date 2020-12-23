@@ -20,27 +20,10 @@ int numapps;
 void switchApp(int ctx);
 #include "apps.h"
 
-#ifndef TFT_DISPOFF
-#define TFT_DISPOFF 0x28
-#endif
-
-#ifndef TFT_SLPIN
-#define TFT_SLPIN 0x10
-#endif
-
-#define TFT_MOSI 19
-#define TFT_SCLK 18
-#define TFT_CS 5
-#define TFT_DC 16
-#define TFT_RST 23
-
-#define TFT_BL 4 // Display backlight control pin
-#define ADC_EN 14
-#define ADC_PIN 34
 #define BUTTON_1 35
 #define BUTTON_2 0
 
-TFT_eSPI tft = TFT_eSPI(135, 240);
+TFT_eSPI tft = TFT_eSPI();
 Button2 btn1(BUTTON_1);
 Button2 btn2(BUTTON_2);
 
@@ -53,28 +36,101 @@ void button_init() {
   btn1.setLongClickHandler([](Button2 & b) {
     Serial.println("Button 1 pressed long.");
     if (!wakeCallback()) {
-      apps[menu.getCtx()]->onButton1LongClick();
+      byte orientation = Util::Screen::getRotation();
+      if(orientation == 0) {
+        apps[menu.getCtx()]->onButton1LongClick();
+      } else if(orientation == 1) {
+
+      } else if(orientation == 2) {
+
+      } else {
+        apps[menu.getCtx()]->onButton1LongClick();
+      }
     }
   });
-  btn1.setClickHandler([](Button2 & b) {
-    Serial.println("Button 1 pressed short.");
+  btn2.setLongClickHandler([](Button2 & b) {
+    Serial.println("Button 2 pressed long.");
     if (!wakeCallback()) {
-      apps[menu.getCtx()]->onButton1Click();
+      byte orientation = Util::Screen::getRotation();
+      if(orientation == 0) {
+
+      } else if(orientation == 1) {
+        apps[menu.getCtx()]->onButton1LongClick();
+      } else if(orientation == 2) {
+        apps[menu.getCtx()]->onButton1LongClick();
+      } else {
+
+      }
     }
   });
 
+  btn1.setClickHandler([](Button2 & b) {
+    Serial.println("Button 1 pressed short.");
+    if (!wakeCallback()) {
+      byte orientation = Util::Screen::getRotation();
+      if(orientation == 0) {
+        apps[menu.getCtx()]->onButton1Click();
+      } else if(orientation == 1) {
+        apps[menu.getCtx()]->onButton2Click();
+      } else if(orientation == 2) {
+        apps[menu.getCtx()]->onButton2Click();
+      } else {
+        apps[menu.getCtx()]->onButton1Click();
+      }
+    }
+  });
   btn2.setClickHandler([](Button2 & b) {
     Serial.println("Button 2 pressed short.");
     if (!wakeCallback()) {
-      apps[menu.getCtx()]->onButton2Click();
+      byte orientation = Util::Screen::getRotation();
+      if(orientation == 0) {
+        apps[menu.getCtx()]->onButton2Click();
+      } else if(orientation == 1) {
+        apps[menu.getCtx()]->onButton1Click();
+      } else if(orientation == 2) {
+        apps[menu.getCtx()]->onButton1Click();
+      } else {
+        apps[menu.getCtx()]->onButton2Click();
+      }
+    }
+  });
+
+  btn1.setDoubleClickHandler([](Button2 & b) {
+    Serial.println("Button 2 pressed double.");
+    if (!wakeCallback()) {
+      byte orientation = Util::Screen::getRotation();
+      if(orientation == 0) {
+
+      } else if(orientation == 1) {
+        apps[menu.getCtx()]->onClose();
+        menu.setCtx(0);
+        menu.onSetup(tft);
+      } else if(orientation == 2) {
+        apps[menu.getCtx()]->onClose();
+        menu.setCtx(0);
+        menu.onSetup(tft);
+      } else {
+
+      }
     }
   });
   btn2.setDoubleClickHandler([](Button2 & b) {
     Serial.println("Button 2 pressed double.");
     if (!wakeCallback()) {
-      apps[menu.getCtx()]->onClose();
-      menu.setCtx(0);
-      menu.onSetup(tft);
+      byte orientation = Util::Screen::getRotation();
+      if(orientation == 0) {
+        apps[menu.getCtx()]->onClose();
+        menu.setCtx(0);
+        menu.onSetup(tft);
+      } else if(orientation == 1) {
+
+      } else if(orientation == 2) {
+
+      } else {
+        apps[menu.getCtx()]->onClose();
+        menu.setCtx(0);
+        menu.onSetup(tft);
+      }
     }
   });
 }
@@ -112,7 +168,7 @@ void setup()
     ledcAttachPin(TFT_BL, Util::Screen::pwmLedChannelTFT);
 
     byte brightness = configDoc.containsKey("screenBrightness") ? configDoc["screenBrightness"] : 255;
-    Util::Screen::setBrightness(tft, brightness);
+    Util::Screen::setBrightness(brightness);
   }
 
   tft.setSwapBytes(true);
