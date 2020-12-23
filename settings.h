@@ -1,6 +1,6 @@
 #include "wifisymbols.h"
 #include "batterycharge.h"
-#include <NTPClient.h>
+#include "lwip/apps/sntp.h"
 #define Threshold 40
 #define ADC_PIN 34
 
@@ -89,16 +89,14 @@ bool drawWifiSymbol(TFT_eSPI tft, byte strength, int x) {
   return false;
 }
 
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP);
-
+const char* clockFormat;
 void drawClock(TFT_eSPI tft) {
-  //  Serial.println("Rendering clock");
-  if (timeClient.getEpochTime() > 1000000000) {
-    tft.printf("%02d", timeClient.getHours());
-    tft.print(":");
-    tft.printf("%02d", timeClient.getMinutes());
-    //Serial.print(timeClient.getEpochTime());
+  //Serial.println("Rendering clock");
+  struct tm timeinfo;
+  char buf[80];
+  if (getLocalTime(&timeinfo, 1)) {
+    strftime (buf, 80, clockFormat, &timeinfo);
+    tft.println(buf);
   } else {
     tft.print("--:--");
   }

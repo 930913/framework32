@@ -4,7 +4,7 @@
 #include <WiFiMulti.h>
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
-#include <WiFiUdp.h>
+//#include <WiFiUdp.h>
 #include <Wire.h>
 //#define LONGCLICK_MS    500
 //#define DOUBLECLICK_MS  500
@@ -184,6 +184,15 @@ void setup()
   initialiseSettings();
   calibrateBattery();
 
+  const char* tz = configDoc.containsKey("timezone") ? configDoc["timezone"].as<char*>() : "GMT0";
+  clockFormat = configDoc.containsKey("clockFormat") ? configDoc["clockFormat"].as<char*>() : "%H:%M";
+  setenv("TZ", tz, 1);
+
+  sntp_setoperatingmode(SNTP_OPMODE_POLL);
+  sntp_setservername(0, "pool.ntp.org");
+  sntp_init();
+  tzset();
+
   menu.onSetup(tft);
 
   Serial.println("Initialising buttons");
@@ -227,12 +236,6 @@ void loopBackground(void *pvParameters) {
   (void) pvParameters;
   for (;;) {
     if (wifiEnabled && !hotspotEnabled && WiFiMulti.run() == WL_CONNECTED) {
-      if (!beganTime) {
-        timeClient.begin();
-        beganTime = true;
-      }
-      timeClient.update();
-
       int rssi = WiFi.RSSI();
       wifiSignal = wifiStrength(rssi);
     } else {
