@@ -2,6 +2,8 @@
 
 char configJson[4096] = R"CONFIG({
   "sleepTimeout": 20000,
+  "rotation": 0,
+  "screenBrightness": 255,
   "wifi": [
     {
       "ssid": "???",
