@@ -218,7 +218,7 @@ void loopProg(void *pvParameters) {
     if (!app->getFullscreen()) renderStatus(tft);
     app->render(tft);
     // TODO: Remove this delay without tripping the watchdog
-    vTaskDelay(10);
+    vTaskDelay(1);
   }
 }
 
