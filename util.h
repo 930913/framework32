@@ -19,6 +19,14 @@ namespace Util {
       return orientation;
     }
 
+    // TODO: Probably need to make this configurable, as there may be devices that are the opposite
+    bool isPortrait() {
+      return orientation == 0 || orientation == 2;
+    }
+    bool isLandscape() {
+      return orientation == 1 || orientation == 3;
+    }
+
     byte getHeight() {
       return orientation % 2 ? TFT_WIDTH : TFT_HEIGHT;
     }
