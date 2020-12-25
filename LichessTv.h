@@ -34,8 +34,6 @@ class LichessTv : public App {
     static const unsigned long darkSquareColour = 0xB44C;
     static const unsigned long movedLightSquareColour = 0xCE8D;
     static const unsigned long movedDarkSquareColour = 0xAD07;
-    static const int boardOffsetX = 3;
-    static const int boardOffsetY = 45;
 
     static const unsigned short* getPiece(char piece) {
       switch (piece) {
@@ -77,6 +75,8 @@ class LichessTv : public App {
 
     void drawBoard(TFT_eSPI tft) {
       //Serial.println("Drawing board");
+      int boardOffsetX = max(0, Util::Screen::isPortrait() ? (Util::Screen::Grid::x1m1() - 64) : (Util::Screen::Grid::x2m1() - 64));
+      int boardOffsetY = Util::Screen::Grid::y1m1() - 64;
       for (int i = 0; i < 64; ++i) {
         byte file = i % 8;
         byte rank = i / 8;
@@ -97,7 +97,7 @@ class LichessTv : public App {
 
     void drawUsers(TFT_eSPI tft) {
       //Serial.println("Drawing users");
-      tft.setCursor(1, 11, 2);
+      tft.setCursor(Util::Screen::isPortrait() ? Util::Screen::Grid::x1l1() : 130, Util::Screen::Grid::y2t1() + 1, 2);
       if (btitle.length() > 0) {
         tft.setTextColor(0xD484);
         tft.print(btitle);
@@ -105,18 +105,16 @@ class LichessTv : public App {
       }
       if (bnick.length() > 0) {
         tft.setTextColor(TFT_WHITE);
-        tft.println(bnick);
+        tft.print(bnick);
       }
-      drawClock(tft, bclock);
       if (brating) {
-        tft.setCursor(85, 27, 2);
+        tft.setTextDatum(TR_DATUM);
         tft.setTextColor(TFT_GREY);
-        tft.print("(");
-        tft.print(brating);
-        tft.print(")");
+        tft.drawString(String("(") + brating + ")", Util::Screen::Grid::x1r1() - 1, Util::Screen::Grid::y2t1() + 16, 2);
+        tft.setTextDatum(MC_DATUM);
       }
 
-      tft.setCursor(1, 175, 2);
+      tft.setCursor(Util::Screen::isPortrait() ? Util::Screen::Grid::x1l1() : 130, Util::Screen::Grid::y2b2() - 40, 2);
       if (wtitle.length() > 0) {
         tft.setTextColor(0xD484);
         tft.print(wtitle);
@@ -124,26 +122,25 @@ class LichessTv : public App {
       }
       if (wnick.length() > 0) {
         tft.setTextColor(TFT_WHITE);
-        tft.println(wnick);
+        tft.print(wnick);
       }
-      drawClock(tft, wclock);
       if (wrating) {
-        tft.setCursor(85, 191, 2);
+        tft.setTextDatum(TR_DATUM);
         tft.setTextColor(TFT_GREY);
-        tft.print("(");
-        tft.print(wrating);
-        tft.print(")");
+        tft.drawString(String("(") + wrating + ")", Util::Screen::Grid::x1r1() - 1, Util::Screen::Grid::y2b2() - 25, 2);
+        tft.setTextDatum(MC_DATUM);
       }
+      drawTime(tft);
     }
 
     void drawTime(TFT_eSPI tft) {
-      tft.setCursor(0, 27, 2);
+      tft.setCursor(Util::Screen::isPortrait() ? Util::Screen::Grid::x1l1() : 130, Util::Screen::Grid::y2t1() + 16, 2);
       tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
       bool whiteTurn = ply % 2 == 0;
       float bupdatedClock = whiteTurn ? bclock : max(0.0, bclock - (millis() - lastUpdate) / 1000.0);
       drawClock(tft, bupdatedClock);
-      tft.setCursor(0, 191, 2);
+      tft.setCursor(Util::Screen::isPortrait() ? Util::Screen::Grid::x1l1() : 130, Util::Screen::Grid::y2b2() - 25, 2);
       float wupdatedClock = whiteTurn ? max(0.0, wclock - (millis() - lastUpdate) / 1000.0) : wclock;
       drawClock(tft, wupdatedClock);
     }
@@ -404,13 +401,17 @@ class LichessTv : public App {
           drawUsers(tft);
           drawBoard(tft);
           drawIcons(tft);
+          int by = Util::Screen::Grid::y2t1() + 15;
+          int wy = Util::Screen::Grid::y2b2() - 26;
+          int x1 = Util::Screen::isPortrait() ? Util::Screen::Grid::x1l1() : Util::Screen::Grid::x2l2();
+          int x2 = Util::Screen::isPortrait() ? Util::Screen::Grid::x1r1() : Util::Screen::Grid::x2r2();
           if (gameState == DRAW) {
-            tft.drawLine(0, 25, 135, 25, 0xD484);
-            tft.drawLine(0, 189, 135, 189, 0xD484);
+            tft.drawLine(x1, by, x2, by, 0xD484);
+            tft.drawLine(x1, wy, x2, wy, 0xD484);
           } else if (gameState == WHITE_WIN) {
-            tft.drawLine(0, 189, 135, 189, TFT_GREEN);
+            tft.drawLine(x1, wy, x2, wy, TFT_GREEN);
           } else {
-            tft.drawLine(0, 25, 135, 25, TFT_GREEN);
+            tft.drawLine(x1, by, x2, by, TFT_GREEN);
           }
           shouldRender = false;
         }
