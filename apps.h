@@ -1,18 +1,20 @@
 // Include apps here
 #include "Menu.h"
 #include "About.h"
-#include "Breakout.h"
-#include "Hive.h"
-#include "WifiScan.h"
 #include "BbcNews.h"
-#include "DemoApp.h"
 #include "BitcoinTracker.h"
-//#include "LichessTv.h"
+#include "Breakout.h"
+#include "DemoApp.h"
+#include "Hive.h"
+#include "LichessTv.h"
+#include "Octoprint.h"
+#include "WifiScan.h"
 
 // Register apps here
 App* apps[] = {
   &menu,
-//  &lichesstv,
+  &lichesstv,
+  &octoprint,
   &bitcointracker,
   &breakout,
   &hive,

@@ -106,7 +106,8 @@ void renderStatus(TFT_eSPI tft) {
   //  Serial.println("Rendering status");
   if (lastStatusRender > millis() - 5000) return;
 
-  tft.fillRect(0, 0, Util::Screen::getWidth(), 10, 0x0000);
+  tft.fillRect(0, 0, Util::Screen::getWidth(), 10, TFT_BLACK);
+  tft.setTextColor(TFT_WHITE);
   tft.setCursor(0, 0, 1);
   tft.setTextSize(1);
   float voltage = getBatteryVoltage();

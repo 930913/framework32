@@ -20,5 +20,11 @@ char configJson[4096] = R"CONFIG({
   "Hive": {
     "username": "???",
     "password": "???"
+  },
+  "Octoprint": {
+    "server": "https://192.168.0.1",
+    "apikey": "???",
+    "sleepDisabled": true,
+    "refreshTime": 5000
   }
 })CONFIG";
