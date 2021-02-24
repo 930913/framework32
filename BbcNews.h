@@ -115,10 +115,6 @@ class BbcNews : public App {
     void onButton2Click() override {
       newsUp();
     };
-
-    void onClose() override {
-      for (int i = 0; i < numNews; ++i) if (news[i] != NULL) delete news[i];
-    }
 };
 
 BbcNews bbcnews;
