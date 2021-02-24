@@ -203,7 +203,7 @@ class LichessTv : public App {
       // Checking this cert causes random crashes :(
       //clientHttps->setCACert(letsEncryptCert);
       HTTPClient https;
-      if (https.begin(*clientHttps, "https://lichess.org/tv/channels")) {
+      if (https.begin(*clientHttps, "https://lichess.org/api/tv/channels")) {
         int httpCode = https.GET();
 
         delay(1);
