@@ -1,5 +1,5 @@
 #include <TOTP.h>
-#include "OtpLogo.h"
+#include "otplogo.h"
 
 class Otp : public App {
   private:
