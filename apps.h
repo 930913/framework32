@@ -8,6 +8,7 @@
 #include "Hive.h"
 #include "LichessTv.h"
 #include "Octoprint.h"
+//#include "Otp.h"
 #include "WifiScan.h"
 
 // Register apps here
@@ -19,6 +20,7 @@ App* apps[] = {
   &breakout,
   &hive,
   &bbcnews,
+  //&otp,
   &wifiscan,
   &demoapp,
   &about

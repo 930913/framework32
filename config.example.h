@@ -26,5 +26,8 @@ char configJson[4096] = R"CONFIG({
     "apikey": "???",
     "sleepDisabled": true,
     "refreshTime": 5000
+  },
+  "OTP Auth": {
+    "base32Key": "???"
   }
 })CONFIG";
